@@ -1,0 +1,299 @@
+{
+  "schema_version": "skill-issue.model-pack/v1",
+  "name": "skill-issue-default-pack",
+  "version": "0.1.0",
+  "runtime": "ort",
+  "default_quantization": "int8",
+  "models": [
+    {
+      "id": "fast-screener-minilm-l6",
+      "role": "fast_screener",
+      "display_name": "Fast Screener",
+      "upstream": {
+        "repository": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+        "license": "apache-2.0",
+        "model_card_url": "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2",
+        "parameters_millions": 22.7
+      },
+      "artifacts": {
+        "onnx_path": "onnx/fast-screener-minilm-l6/model.int8.onnx",
+        "tokenizer_path": "tokenizers/fast-screener-minilm-l6/",
+        "checksum_sha256": null,
+        "present_in_repo": false
+      },
+      "sizing": {
+        "fp32_mb": 90,
+        "int8_mb": 25
+      },
+      "task": {
+        "pipeline": "feature-extraction",
+        "input": "agent text, tool descriptions, finding evidence snippets",
+        "output": "384-dimensional semantic embedding"
+      },
+      "strengths": [
+        "cheap semantic triage",
+        "duplicate grouping",
+        "finding clustering",
+        "routing snippets to specialist judges"
+      ],
+      "limitations": [
+        "not a security classifier by itself",
+        "short context window"
+      ],
+      "routing": {
+        "invoked_by_default": true,
+        "max_input_tokens": 256,
+        "routes_to": [
+          "injection_sentinel",
+          "intent_classifier",
+          "code_description_judge",
+          "security_domain_judge",
+          "exfiltration_judge"
+        ]
+      },
+      "benchmark_gate": {
+        "minimum_precision": 0.9,
+        "minimum_recall": 0.75,
+        "status": "pending_dataset"
+      }
+    },
+    {
+      "id": "injection-sentinel-deberta-v3",
+      "role": "injection_sentinel",
+      "display_name": "Injection Sentinel",
+      "upstream": {
+        "repository": "ProtectAI/deberta-v3-base-prompt-injection-v2",
+        "revision": "e6535ca4ce3ba852083e75ec585d7c8aeb4be4c5",
+        "license": "apache-2.0",
+        "model_card_url": "https://huggingface.co/ProtectAI/deberta-v3-base-prompt-injection-v2",
+        "parameters_millions": 184.0
+      },
+      "artifacts": {
+        "onnx_path": "onnx/injection-sentinel-deberta-v3/model.int8.onnx",
+        "tokenizer_path": "tokenizers/injection-sentinel-deberta-v3/",
+        "checksum_sha256": null,
+        "present_in_repo": false
+      },
+      "sizing": {
+        "fp32_mb": 740,
+        "int8_mb": 190
+      },
+      "task": {
+        "pipeline": "text-classification",
+        "input": "natural-language prompts, rules, tool descriptions, and agent instructions",
+        "output": "benign or injection-detected score"
+      },
+      "strengths": [
+        "prompt injection detection",
+        "instruction override language",
+        "agent rule and tool-description review"
+      ],
+      "limitations": [
+        "English-focused",
+        "not a jailbreak detector",
+        "can false-positive on system prompts"
+      ],
+      "routing": {
+        "invoked_by_default": false,
+        "max_input_tokens": 512,
+        "routes_to": []
+      },
+      "benchmark_gate": {
+        "minimum_precision": 0.92,
+        "minimum_recall": 0.9,
+        "status": "pending_dataset"
+      }
+    },
+    {
+      "id": "intent-classifier-deberta-v3-zeroshot",
+      "role": "intent_classifier",
+      "display_name": "Intent Classifier",
+      "upstream": {
+        "repository": "MoritzLaurer/deberta-v3-base-zeroshot-v1.1-all-33",
+        "revision": "613e8c52c33e2bc0677ada4ad760f693e5e0f581",
+        "license": "mit",
+        "model_card_url": "https://huggingface.co/MoritzLaurer/deberta-v3-base-zeroshot-v1.1-all-33",
+        "parameters_millions": 184.0
+      },
+      "artifacts": {
+        "onnx_path": "onnx/intent-classifier-deberta-v3-zeroshot/model.int8.onnx",
+        "tokenizer_path": "tokenizers/intent-classifier-deberta-v3-zeroshot/",
+        "checksum_sha256": null,
+        "present_in_repo": false
+      },
+      "sizing": {
+        "fp32_mb": 740,
+        "int8_mb": 190
+      },
+      "task": {
+        "pipeline": "zero-shot-classification",
+        "input": "asset snippets plus candidate intent labels",
+        "output": "entailment-style scores for configured intent labels"
+      },
+      "strengths": [
+        "flexible intent labels without immediate fine-tuning",
+        "credential access classification",
+        "destructive action classification",
+        "policy bypass and network-send triage"
+      ],
+      "limitations": [
+        "classification quality depends on label phrasing",
+        "larger CPU cost than MiniLM"
+      ],
+      "routing": {
+        "invoked_by_default": false,
+        "max_input_tokens": 512,
+        "routes_to": []
+      },
+      "benchmark_gate": {
+        "minimum_precision": 0.88,
+        "minimum_recall": 0.8,
+        "status": "pending_dataset"
+      }
+    },
+    {
+      "id": "code-description-unixcoder-base",
+      "role": "code_description_judge",
+      "display_name": "Code-Description Judge",
+      "upstream": {
+        "repository": "microsoft/unixcoder-base",
+        "revision": "5604afdc964f6c53782a6813140ade5216b99006",
+        "license": "apache-2.0",
+        "model_card_url": "https://huggingface.co/microsoft/unixcoder-base",
+        "parameters_millions": 125.0
+      },
+      "artifacts": {
+        "onnx_path": "onnx/code-description-unixcoder-base/model.int8.onnx",
+        "tokenizer_path": "tokenizers/code-description-unixcoder-base/",
+        "checksum_sha256": null,
+        "present_in_repo": false
+      },
+      "sizing": {
+        "fp32_mb": 500,
+        "int8_mb": 125
+      },
+      "task": {
+        "pipeline": "feature-extraction",
+        "input": "paired natural-language descriptions and adjacent code or command snippets",
+        "output": "code/text alignment score"
+      },
+      "strengths": [
+        "code and natural-language representation",
+        "description/implementation mismatch detection",
+        "semantic comparison of scripts and tool declarations"
+      ],
+      "limitations": [
+        "not trained specifically on MCP configs",
+        "needs paired snippets from static analysis"
+      ],
+      "routing": {
+        "invoked_by_default": false,
+        "max_input_tokens": 512,
+        "routes_to": []
+      },
+      "benchmark_gate": {
+        "minimum_precision": 0.85,
+        "minimum_recall": 0.75,
+        "status": "pending_dataset"
+      }
+    },
+    {
+      "id": "security-domain-secbert",
+      "role": "security_domain_judge",
+      "display_name": "Security Domain Judge",
+      "upstream": {
+        "repository": "jackaduma/SecBERT",
+        "revision": "7c603df5bc4c5ba9c731bcc2ea0ab2db36e104cb",
+        "license": "apache-2.0",
+        "model_card_url": "https://huggingface.co/jackaduma/SecBERT",
+        "parameters_millions": 84.1
+      },
+      "artifacts": {
+        "onnx_path": "onnx/security-domain-secbert/model.int8.onnx",
+        "tokenizer_path": "tokenizers/security-domain-secbert/",
+        "checksum_sha256": null,
+        "present_in_repo": false
+      },
+      "sizing": {
+        "fp32_mb": 340,
+        "int8_mb": 85
+      },
+      "task": {
+        "pipeline": "feature-extraction",
+        "input": "security findings, snippets, and taxonomy labels",
+        "output": "security-domain embedding or classifier features"
+      },
+      "strengths": [
+        "cybersecurity terminology",
+        "threat-category mapping",
+        "taxonomy alignment for reviewer evidence"
+      ],
+      "limitations": [
+        "base model is fill-mask oriented",
+        "needs task-specific head or downstream classifier"
+      ],
+      "routing": {
+        "invoked_by_default": false,
+        "max_input_tokens": 512,
+        "routes_to": []
+      },
+      "benchmark_gate": {
+        "minimum_precision": 0.85,
+        "minimum_recall": 0.75,
+        "status": "pending_dataset"
+      }
+    },
+    {
+      "id": "exfiltration-minilm-l6",
+      "role": "exfiltration_judge",
+      "display_name": "Exfiltration Judge",
+      "upstream": {
+        "repository": "skill-issue/exfiltration-minilm-l6",
+        "revision": "dataset-freeze-0.1.0",
+        "license": "apache-2.0",
+        "model_card_url": "https://huggingface.co/skill-issue/exfiltration-minilm-l6",
+        "parameters_millions": 22.7
+      },
+      "artifacts": {
+        "onnx_path": "onnx/exfiltration-minilm-l6/model.int8.onnx",
+        "tokenizer_path": "tokenizers/exfiltration-minilm-l6/",
+        "checksum_sha256": null,
+        "present_in_repo": false
+      },
+      "sizing": {
+        "fp32_mb": 90,
+        "int8_mb": 25
+      },
+      "task": {
+        "pipeline": "text-classification",
+        "input": "snippets containing file reads, environment access, archive creation, and network-send operations",
+        "output": "benign or exfiltration-intent score"
+      },
+      "strengths": [
+        "credential and environment harvesting patterns",
+        "private file collection patterns",
+        "archive plus network-send combinations",
+        "Skill Issue-specific taxonomy labels"
+      ],
+      "limitations": [
+        "custom model is not trained yet",
+        "requires curated benign and malicious examples before blocking use"
+      ],
+      "routing": {
+        "invoked_by_default": false,
+        "max_input_tokens": 256,
+        "routes_to": []
+      },
+      "benchmark_gate": {
+        "minimum_precision": 0.95,
+        "minimum_recall": 0.85,
+        "status": "pending_dataset"
+      }
+    }
+  ],
+  "notes": [
+    "Phase 3 starts with locked metadata and validation; weights are intentionally not bundled until export, checksums, and benchmark gates are complete.",
+    "No SLM judge can independently block an asset until its category-specific benchmark gate has passed."
+  ]
+}

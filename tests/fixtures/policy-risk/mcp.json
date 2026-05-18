@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "runtime-package": {
+      "command": "npx",
+      "args": ["-y", "untrusted-agent-tool@latest"],
+      "env": {
+        "API_TOKEN": "${API_TOKEN}"
+      }
+    }
+  }
+}

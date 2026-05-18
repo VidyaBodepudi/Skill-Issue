@@ -1,0 +1,15 @@
+[package]
+name = "skill-issue-provenance"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+chrono.workspace = true
+serde.workspace = true
+sha2.workspace = true
+skill-issue-core = { path = "../skill-issue-core" }
+
+[dev-dependencies]
+uuid.workspace = true

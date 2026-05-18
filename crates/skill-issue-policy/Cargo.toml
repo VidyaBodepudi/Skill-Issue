@@ -1,0 +1,13 @@
+[package]
+name = "skill-issue-policy"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+chrono.workspace = true
+serde.workspace = true
+skill-issue-core = { path = "../skill-issue-core" }
+skill-issue-provenance = { path = "../skill-issue-provenance" }
+uuid.workspace = true

@@ -1,0 +1,48 @@
+[workspace]
+members = [
+    "crates/skill-issue-analyzers",
+    "crates/skill-issue-audit",
+    "crates/skill-issue-cli",
+    "crates/skill-issue-connectors",
+    "crates/skill-issue-core",
+    "crates/skill-issue-db",
+    "crates/skill-issue-exports",
+    "crates/skill-issue-inventory",
+    "crates/skill-issue-judges",
+    "crates/skill-issue-policy",
+    "crates/skill-issue-provenance",
+    "crates/skill-issue-scanner",
+    "crates/skill-issue-server",
+]
+default-members = ["crates/skill-issue-server"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.88"
+license = "Apache-2.0"
+
+[workspace.dependencies]
+anyhow = "1.0"
+apalis = "0.7"
+apalis-sql = { version = "0.7", default-features = false, features = ["postgres", "migrate", "tokio-comp"] }
+async-trait = "0.1"
+axum = "0.8"
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4.5", features = ["derive"] }
+hmac = "0.12"
+maud = "0.27"
+regex = "1.11"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.10"
+sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio-rustls", "postgres", "uuid", "chrono", "json", "migrate", "macros"] }
+thiserror = "2.0"
+tokio = { version = "1.43", features = ["macros", "rt-multi-thread", "signal"] }
+tower-http = { version = "0.6", features = ["trace"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+uuid = { version = "1.12", features = ["serde", "v4"] }
+walkdir = "2.5"

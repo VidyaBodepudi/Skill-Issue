@@ -1,0 +1,22 @@
+[package]
+name = "skill-issue-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "skill-issue"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+skill-issue-core = { path = "../skill-issue-core" }
+skill-issue-exports = { path = "../skill-issue-exports" }
+skill-issue-judges = { path = "../skill-issue-judges" }
+skill-issue-policy = { path = "../skill-issue-policy" }
+skill-issue-provenance = { path = "../skill-issue-provenance" }
+skill-issue-scanner = { path = "../skill-issue-scanner" }

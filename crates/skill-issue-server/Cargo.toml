@@ -1,0 +1,28 @@
+[package]
+name = "skill-issue-server"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+apalis.workspace = true
+apalis-sql.workspace = true
+axum.workspace = true
+chrono.workspace = true
+maud.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+skill-issue-connectors = { path = "../skill-issue-connectors" }
+skill-issue-core = { path = "../skill-issue-core" }
+skill-issue-db = { path = "../skill-issue-db" }
+skill-issue-exports = { path = "../skill-issue-exports" }
+skill-issue-policy = { path = "../skill-issue-policy" }
+skill-issue-scanner = { path = "../skill-issue-scanner" }
+sqlx.workspace = true
+tokio.workspace = true
+tower-http.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+uuid.workspace = true

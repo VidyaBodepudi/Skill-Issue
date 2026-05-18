@@ -1,0 +1,15 @@
+[package]
+name = "skill-issue-scanner"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+skill-issue-analyzers = { path = "../skill-issue-analyzers" }
+skill-issue-core = { path = "../skill-issue-core" }
+skill-issue-inventory = { path = "../skill-issue-inventory" }
+skill-issue-judges = { path = "../skill-issue-judges" }
+skill-issue-policy = { path = "../skill-issue-policy" }
+skill-issue-provenance = { path = "../skill-issue-provenance" }

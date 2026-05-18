@@ -1,0 +1,7 @@
+target
+.git
+.env
+.env.*
+datasets
+training
+benchmarks

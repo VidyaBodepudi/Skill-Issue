@@ -1,0 +1,13 @@
+[package]
+name = "skill-issue-analyzers"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+regex.workspace = true
+serde_json.workspace = true
+skill-issue-audit = { path = "../skill-issue-audit" }
+skill-issue-core = { path = "../skill-issue-core" }

@@ -1,0 +1,3 @@
+skill-issue.local {
+    proxy "http://app:3000/"
+}
